@@ -14,16 +14,16 @@ class ProductTest < ActiveSupport::TestCase
 
   test "product price must be positive" do
     product = Product.new(title: "My Book Title",
-    					  description: "yyy",
-    					  image_url: "zzz.jpg")
+                          description: "yyy",
+                          image_url: "zzz.jpg")
 
     product.price = -1
     assert product.invalid?
-    assert_equal ["must be greater that or equal to 0.01"], product.errors[:price]
+    assert_equal ["must be greater than or equal to 0.01"], product.errors[:price]
 
     product.price = 0
     assert product.invalid?
-    assert_equal ["must be greater that or equal to 0.01"], product.errors[:price]
+    assert_equal ["must be greater than or equal to 0.01"], product.errors[:price]
 
     product.price = 1
     assert product.valid?
@@ -31,9 +31,9 @@ class ProductTest < ActiveSupport::TestCase
 
   def new_product(image_url)
   	product = Product.new(title: "any",
-  						  description: "kdsjfkl",
-  						  price: 1,
-  						  image_url: image_url)
+					  						  description: "kdsjfkl",
+					  						  price: 1,
+					  						  image_url: image_url)
   end
 
   test "image url" do
@@ -46,11 +46,22 @@ class ProductTest < ActiveSupport::TestCase
 
   test "product is not valid without a unique title" do
   	product = Product.new(title: products(:ruby).title,
-  						  description: "yyy",
-  						  price: 1,
-  						  image_url: "fred.gif")
+  						  					description: "yyy",
+  						  					price: 1,
+  						  					image_url: "fred.gif")
   	assert product.invalid?
   	assert_equal ["has already been taken"], product.errors[:title]
+  end
+
+  test "product is not valid without a unique title - i18n" do
+    product = Product.new(title:mproducts(:ruby).title,
+                          description: "yyy", 
+                          price: 1, 
+                          image_url: "fred.gif")
+
+    assert product.invalid?
+    assert_equal [I18n.translate('errors.messages.taken')],
+                 product.errors[:title]
   end
 
 end
