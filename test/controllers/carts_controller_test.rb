@@ -30,6 +30,7 @@ class CartsControllerTest < ActionController::TestCase
   end
 
   test "should get edit" do
+    # binding.pry
     get :edit, id: @cart
     assert_response :success
   end
